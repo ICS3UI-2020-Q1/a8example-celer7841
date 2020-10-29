@@ -64,6 +64,14 @@ public class Main implements Runnable, ActionListener{
   validateButton.setBounds(380, 10, 100, 35);
   resetButton = new JButton("Reset");
   resetButton.setBounds(380, 55, 100, 35);
+
+  // set the action command so we know which button was pressed
+  validateButton.setActionCommand("validate");
+  resetButton.setActionCommand("reset");
+
+  // add the action listener to the buttons
+  validateButton.addActionListener(this);
+  resetButton.addActionListener(this);
   
   // initialize the text areas
   outputTextArea = new JTextArea();
@@ -71,6 +79,8 @@ public class Main implements Runnable, ActionListener{
   instructionTextArea = new JTextArea();
   instructionTextArea.setBounds(10, 350, 780, 240);
 
+String instructionText = "This is a simple Triangle Detector.\nEnter an integer into each of the textfields above.\nPress the button \"Validate\" to check whether or not the triangle is valid.\nPress Reset to start all over. ";
+instructionTextArea.setText(instructionText);
   // make it so they cant type in the areas
   outputTextArea.setEnabled(false);
   instructionTextArea.setEnabled(false);
@@ -96,6 +106,17 @@ public class Main implements Runnable, ActionListener{
   // add the main panel to the screen
   frame.add(mainPanel);
   
+
+  }
+
+
+  // a method to determine if a triangle is valid given the 3 side lengths 
+  public boolean isValidTriangle(int a,int b, int c){
+    if(a + b > c && a + c > b && b + c > a){
+      return true;
+    }else{
+      return false;
+    }
   }
   
 
@@ -103,6 +124,38 @@ public class Main implements Runnable, ActionListener{
   public void actionPerformed(ActionEvent e){
     // get the command from the action
     String command = e.getActionCommand();
+
+  // deal with the buttons being pressed
+  if(command.equals ("reset")){
+    // reset button pressed 
+    // clear all of the text fields and areas 
+    firstInput.setText("");
+    secondInput.setText("");
+    thirdInput.setText("");
+    outputTextArea.setText("");
+  }else if (command.equals("validate")){
+    // validate button was pressed 
+    // get the text that appears inside of each text box
+    String firstText = firstInput.getText();
+    String secondText = secondInput.getText();
+    String thirdText = thirdInput.getText();
+
+    // convert these String into integers
+    int firstSide = Integer.parseInt(firstText);
+    int secondSide = Integer.parseInt(secondText);
+    int thirdSide = Integer.parseInt(thirdText);
+
+    // ask the isValidTriangle method if the triangle works 
+    boolean isValid = isValidTriangle(firstSide, secondSide, thirdSide);
+
+    // check the result
+    if(isValid){
+      outputTextArea.setText("This is a valid triangle");
+    }else{
+      outputTextArea.setText("This is a invalid triangle");
+    }
+
+  }
 
   }
 
